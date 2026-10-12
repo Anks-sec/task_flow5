@@ -1,73 +1,71 @@
-const taskForm = document.querySelector("#task-form");
-const taskInput = document.querySelector("#task-title");
-const taskList = document.querySelector("#task-list");
-const taskCount = document.querySelector("#task-count");
-const formMessage = document.querySelector("#form-message");
-const emptyState = document.querySelector("#empty-state");
 
-const tasks = [];
+const taskForm = document.getElementById("task-form");
+const taskInput = document.getElementById("task-input");
+const taskList = document.getElementById("task-list");
+const emptyMessage = document.getElementById("empty-message");
 
-function showMessage(message, type = "") {
-  formMessage.textContent = message;
-  formMessage.className = `form-message ${type}`.trim();
-}
-
-function updateTaskCount() {
-  const total = tasks.length;
-  taskCount.textContent = `${total} ${total === 1 ? "task" : "tasks"}`;
-}
-
-function renderTasks() {
-  // Keep the empty-state message visible only when there are no tasks.
-  emptyState.hidden = tasks.length > 0;
-
-  // Remove previous task rows while keeping the empty-state element.
-  taskList.querySelectorAll(".task-item").forEach((item) => item.remove());
-
-  tasks.forEach((task, index) => {
-    const listItem = document.createElement("li");
-    listItem.className = "task-item";
-
-    const number = document.createElement("span");
-    number.className = "task-number";
-    number.textContent = String(index + 1).padStart(2, "0");
-    number.setAttribute("aria-hidden", "true");
-
-    const title = document.createElement("p");
-    title.className = "task-text";
-    // textContent safely displays user input without interpreting it as HTML.
-    title.textContent = task.title;
-
-    const label = document.createElement("span");
-    label.className = "new-label";
-    label.textContent = "Added";
-
-    listItem.append(number, title, label);
-    taskList.appendChild(listItem);
-  });
-
-  updateTaskCount();
-}
-
-taskForm.addEventListener("submit", (event) => {
+// Add a new task
+taskForm.addEventListener("submit", function (event) {
   event.preventDefault();
 
-  const title = taskInput.value.trim();
+  const taskName = taskInput.value.trim();
 
-  // Do not add an empty or whitespace-only task.
-  if (!title) {
-    showMessage("Please enter a task title before adding it.", "error");
-    taskInput.focus();
+  if (taskName === "") {
     return;
   }
 
-  tasks.push({
-    id: Date.now(),
-    title
+  createTask(taskName);
+
+  taskInput.value = "";
+  taskInput.focus();
+
+  updateEmptyMessage();
+});
+
+// Create and display a task
+function createTask(taskName) {
+  const li = document.createElement("li");
+  li.className = "task-item";
+
+  const taskText = document.createElement("span");
+  taskText.className = "task-text";
+  taskText.textContent = taskName;
+
+  // Complete button
+  const completeButton = document.createElement("button");
+  completeButton.className = "complete-btn";
+  completeButton.textContent = "Complete";
+
+  completeButton.addEventListener("click", function () {
+    const isCompleted = li.classList.toggle("completed");
+
+    completeButton.textContent =
+      isCompleted ? "Completed" : "Complete";
   });
 
-  renderTasks();
-  taskForm.reset();
-  showMessage("Task added successfully.", "success");
-  taskInput.focus();
-});
+  // Delete button
+  const deleteButton = document.createElement("button");
+  deleteButton.className = "delete-btn";
+  deleteButton.textContent = "Delete";
+
+  deleteButton.addEventListener("click", function () {
+    li.remove();
+    updateEmptyMessage();
+  });
+
+  // Add elements to the task
+  li.appendChild(taskText);
+  li.appendChild(completeButton);
+  li.appendChild(deleteButton);
+
+  // Display the task
+  taskList.appendChild(li);
+
+  updateEmptyMessage();
+}
+
+// Show message when the list is empty
+function updateEmptyMessage() {
+  emptyMessage.style.display =
+    taskList.children.length === 0 ? "block" : "none";
+}
