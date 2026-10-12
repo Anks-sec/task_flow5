@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskFlow | Add a Task</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+  <main class="app">
+    <header class="app-header">
+      <div class="logo" aria-hidden="true">✓</div>
+      <div>
+        <p class="eyebrow">YOUR DAILY WORKSPACE</p>
+        <h1>TaskFlow</h1>
+        <p class="subtitle">Make a little progress every day.</p>
+      </div>
+    </header>
+
+    <section class="task-card" aria-labelledby="add-task-heading">
+      <h2 id="add-task-heading">Add a task</h2>
+      <p class="section-description">What would you like to get done?</p>
+
+      <form id="task-form" novalidate>
+        <label for="task-title">Task title</label>
+        <div class="input-row">
+          <input id="task-title" name="task-title" type="text" placeholder="e.g. Review project notes" maxlength="120"
+            autocomplete="off" aria-describedby="form-message" />
+          <button type="submit">Add task <span aria-hidden="true">+</span></button>
+        </div>
+        <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+      </form>
+
+      <div class="list-heading">
+        <h2>Your tasks</h2>
+        <span id="task-count" class="task-count">0 tasks</span>
+      </div>
+
+      <ul id="task-list" class="task-list" aria-label="Task list">
+        <li id="empty-state" class="empty-state">
+          <span class="empty-icon" aria-hidden="true">☰</span>
+          <strong>No tasks yet</strong>
+          <span>Add your first task above to get started.</span>
+        </li>
+      </ul>
+    </section>
+
+    <footer>TaskFlow · Simple task management</footer>
+  </main>
+</body>
+
+</html>
